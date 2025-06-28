@@ -2,21 +2,20 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 )
 
 type Workout struct {
-	ID     int       `json:"id"`
-	Name   string    `json:"name"`
-	Date   time.Time `json:"date"`
-	Weight float64   `json:"weight"`
+	ID     int     `json:"id"`
+	Name   string  `json:"name"`
+	Date   string  `json:"date"`
+	Weight float64 `json:"weight"`
 }
 
 func (app *application) viewExercise(w http.ResponseWriter, r *http.Request) {
 
-	currentTime := time.Now()
+	currentTime := time.Now().UTC().Format("2006-01-02")
 
 	workouts := []Workout{
 		{1, "Chest Press", currentTime, 32.5},
@@ -27,7 +26,6 @@ func (app *application) viewExercise(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	err := json.NewEncoder(w).Encode(workouts)
-	fmt.Print(workouts)
 
 	if err != nil {
 		app.serverError(w, r, err)
