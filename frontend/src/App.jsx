@@ -13,7 +13,7 @@ function App() {
     <ul>
       {workouts.map(w => (
         <li key={w.id}>
-          {w.name} — {w.weight} kg {w.date}
+          {w.date}
         </li>
       ))}
     </ul>
