@@ -10,14 +10,13 @@ type Exercise struct {
 }
 
 type Workout struct {
-	ID     int    `json:"id"`
-	UserID int    `json:"userID"`
-	Date   string `json:"date"`
+	ID       int            `json:"id"`
+	Date     string         `json:"date"`
+	Workouts []WorkoutEntry `json:"workouts"`
 }
 
 type WorkoutEntry struct {
 	ID         int     `json:"id"`
-	UserID     int     `json:"userID"`
 	WorkoutID  int     `json:"workoutID"`
 	ExerciseID int     `json:"exerciseID"`
 	Weight     float64 `json:"weight"`
@@ -59,4 +58,76 @@ func (m *WorkoutModel) AddWorkOutEntry(workoutID int, exerciseID int, weight flo
 		return 0, err
 	}
 	return int(id), nil
+}
+
+func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
+	stmt := `SELECT id, date FROM workouts`
+
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var workouts []Workout
+
+	for rows.Next() {
+		var w Workout
+		err := rows.Scan(&w.ID, &w.Date)
+		if err != nil {
+			return nil, err
+		}
+
+		// Fetch workout entries for this workout
+		entries, err := m.getWorkoutEntries(w.ID)
+		if err != nil {
+			return nil, err
+		}
+		w.Workouts = entries
+
+		workouts = append(workouts, w)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return workouts, nil
+}
+
+func (m *WorkoutModel) getWorkoutEntries(workoutID int) ([]WorkoutEntry, error) {
+	stmt := `SELECT id, workoutID, exerciseID, weight, sets, reps 
+             FROM workoutEntries 
+             WHERE workoutID = ?`
+
+	rows, err := m.DB.Query(stmt, workoutID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var entries []WorkoutEntry
+
+	for rows.Next() {
+		var e WorkoutEntry
+		err := rows.Scan(
+			&e.ID,
+			&e.WorkoutID,
+			&e.ExerciseID,
+			&e.Weight,
+			&e.Sets,
+			&e.Reps,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		entries = append(entries, e)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return entries, nil
 }

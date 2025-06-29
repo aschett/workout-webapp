@@ -1,4 +1,4 @@
-CREATE DATABASE workoutdb;
+CREATE DATABASE testworkoutdb;
 USE testworkoutdb;
 
 CREATE TABLE exercises (
