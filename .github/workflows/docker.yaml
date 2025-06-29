@@ -3,7 +3,7 @@ name: Build and Release with Semantic Versioning
 on:
   push:
     branches:
-      - main
+      - dev
 
 env:
   REGISTRY: ghcr.io
