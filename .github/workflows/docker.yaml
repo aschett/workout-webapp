@@ -37,7 +37,7 @@ jobs:
         id: semantic
         uses: cycjimmy/semantic-release-action@v4
         with:
-          branches: main
+          branches: dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,7 +55,6 @@ jobs:
           VERSION=${{ steps.semantic.outputs.new_release_version }}
 
           docker build -t $IMAGE:$VERSION -f ./backend/Dockerfile .
-          docker tag $IMAGE:$VERSION
 
           docker push $IMAGE:$VERSION
 
@@ -66,6 +65,5 @@ jobs:
           VERSION=${{ steps.semantic.outputs.new_release_version }}
 
           docker build -t $IMAGE:$VERSION -f ./frontend/Dockerfile .
-          docker tag $IMAGE:$VERSION
 
           docker push $IMAGE:$VERSION
