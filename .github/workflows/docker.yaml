@@ -52,7 +52,7 @@ jobs:
           IMAGE=$IMAGE_BACKEND
           VERSION=${{ steps.semantic.outputs.new_release_version }}
 
-          docker build -t $IMAGE:$VERSION -f ./backend/Dockerfile .
+          docker build -t $IMAGE:$VERSION -f ./backend/Dockerfile ./backend/
 
           docker push $IMAGE:$VERSION
 
@@ -62,6 +62,6 @@ jobs:
           IMAGE=$IMAGE_FRONTEND
           VERSION=${{ steps.semantic.outputs.new_release_version }}
 
-          docker build -t $IMAGE:$VERSION -f ./frontend/Dockerfile .
+          docker build -t $IMAGE:$VERSION -f ./frontend/Dockerfile ./frontend/
 
           docker push $IMAGE:$VERSION
