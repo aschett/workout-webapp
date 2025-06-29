@@ -8,6 +8,6 @@ func (app *application) routes() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api/workouts", app.ViewAllWorkouts)
-	mux.HandleFunc("GET /api/workouts/{id}", app.workouts.GetWorkoutEntries)
+	mux.HandleFunc("GET /api/workouts/{id}", app.ViewWorkoutEntries)
 	return mux
 }
