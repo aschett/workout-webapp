@@ -37,7 +37,7 @@ jobs:
         id: semantic
         uses: cycjimmy/semantic-release-action@v4
         with:
-          branches: dev
+          branches: '[{ "name": "dev", "prerelease": true }]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
