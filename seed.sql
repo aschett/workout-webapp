@@ -1,5 +1,5 @@
 CREATE DATABASE workoutdb;
-USE workoutdb;
+USE testworkoutdb;
 
 CREATE TABLE exercises (
     id INT AUTO_INCREMENT PRIMARY KEY,
