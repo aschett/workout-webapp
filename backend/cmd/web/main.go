@@ -10,6 +10,8 @@ import (
 
 	"github.com/aschett/workout-webapp/internal/models"
 	"golang.org/x/term"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type application struct {
