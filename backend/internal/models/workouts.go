@@ -79,7 +79,7 @@ func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
 		}
 
 		// Fetch workout entries for this workout
-		entries, err := m.getWorkoutEntries(w.ID)
+		entries, err := m.GetWorkoutEntries(w.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -95,7 +95,7 @@ func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
 	return workouts, nil
 }
 
-func (m *WorkoutModel) getWorkoutEntries(workoutID int) ([]WorkoutEntry, error) {
+func (m *WorkoutModel) GetWorkoutEntries(workoutID int) ([]WorkoutEntry, error) {
 	stmt := `SELECT id, workoutID, exerciseID, weight, sets, reps 
              FROM workoutEntries 
              WHERE workoutID = ?`
