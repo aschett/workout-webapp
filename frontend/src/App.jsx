@@ -1,24 +1,15 @@
-import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import WorkoutList from './components/WorkoutList';
+import WorkoutPage from './components/WorkoutPage';
 
 function App() {
-  const [workouts, setWorkouts] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/workouts')
-      .then(res => res.json())
-      .then(data => setWorkouts(data));
-  }, []);
-
   return (
-    <ul>
-      {workouts.map(w => (
-        <li key={w.id}>
-          <a href={`/api/workouts/${w.id}`}>
-            Workout from the {w.date}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<WorkoutList />} />
+        <Route path="/workouts/:id" element={<WorkoutPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
