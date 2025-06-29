@@ -16,12 +16,13 @@ type Workout struct {
 }
 
 type WorkoutEntry struct {
-	ID         int     `json:"id"`
-	WorkoutID  int     `json:"workoutID"`
-	ExerciseID int     `json:"exerciseID"`
-	Weight     float64 `json:"weight"`
-	Sets       int     `json:"sets"`
-	Reps       int     `json:"reps"`
+	ID           int     `json:"id"`
+	WorkoutID    int     `json:"workoutID"`
+	ExerciseID   int     `json:"exerciseID"`
+	ExerciseName string  `json:"exerciseName"`
+	Weight       float64 `json:"weight"`
+	Sets         int     `json:"sets"`
+	Reps         int     `json:"reps"`
 }
 
 type WorkoutModel struct {
@@ -78,7 +79,6 @@ func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
 			return nil, err
 		}
 
-		// Fetch workout entries for this workout
 		entries, err := m.GetWorkoutEntries(w.ID)
 		if err != nil {
 			return nil, err
@@ -96,9 +96,9 @@ func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
 }
 
 func (m *WorkoutModel) GetWorkoutEntries(workoutID int) ([]WorkoutEntry, error) {
-	stmt := `SELECT id, workoutID, exerciseID, weight, sets, reps 
-             FROM workoutEntries 
-             WHERE workoutID = ?`
+	stmt := `SELECT we.id, we.workoutID, we.exerciseID, e.name AS exerciseName, we.weight, we.sets, we.reps
+             FROM workoutEntries we JOIN exercises e on we.exerciseID = e.id
+             WHERE we.workoutID = ?`
 
 	rows, err := m.DB.Query(stmt, workoutID)
 	if err != nil {
@@ -114,6 +114,7 @@ func (m *WorkoutModel) GetWorkoutEntries(workoutID int) ([]WorkoutEntry, error) 
 			&e.ID,
 			&e.WorkoutID,
 			&e.ExerciseID,
+			&e.ExerciseName,
 			&e.Weight,
 			&e.Sets,
 			&e.Reps,
@@ -121,7 +122,6 @@ func (m *WorkoutModel) GetWorkoutEntries(workoutID int) ([]WorkoutEntry, error) 
 		if err != nil {
 			return nil, err
 		}
-
 		entries = append(entries, e)
 	}
 
