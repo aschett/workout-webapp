@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"flag"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -22,6 +23,8 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		AddSource: true,
 	}))
+
+	addr := flag.String("addr", ":4000", "Http network address")
 
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
