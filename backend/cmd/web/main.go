@@ -29,7 +29,7 @@ func main() {
 	password := os.Getenv("DB_PASSWORD")
 
 	if host == "" || user == "" || dbname == "" || password == "" {
-		logger.Error("Database environment variables are not set")
+		logger.Error("One or more environment variables are not set")
 		os.Exit(1)
 	}
 	// Build the dsn dynamically
