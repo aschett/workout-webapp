@@ -60,6 +60,7 @@ func main() {
 func openDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
+		logger.Error("Failed to connect to database")
 		return nil, err
 	}
 
