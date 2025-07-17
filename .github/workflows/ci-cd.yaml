@@ -1,9 +1,10 @@
-name: Build and Release with Semantic Versioning
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - dev
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 env:
   REGISTRY: ghcr.io
@@ -51,9 +52,7 @@ jobs:
         run: |
           IMAGE=$IMAGE_BACKEND
           VERSION=${{ steps.semantic.outputs.new_release_version }}
-
           docker build -t $IMAGE:$VERSION -f ./backend/Dockerfile ./backend/
-
           docker push $IMAGE:$VERSION
 
       - name: Build and push frontend image
@@ -61,7 +60,26 @@ jobs:
         run: |
           IMAGE=$IMAGE_FRONTEND
           VERSION=${{ steps.semantic.outputs.new_release_version }}
-
           docker build -t $IMAGE:$VERSION -f ./frontend/Dockerfile ./frontend/
-
           docker push $IMAGE:$VERSION
+      
+      # sed is to update the version in the deployment yamls
+      - name: Update the GitOps repository
+        env:
+            GIT_TOKEN: ${{ secrets.GITOPS_PAT }}
+        run: |
+            git config --global user.name "GitHub Actions"
+            git config --global user.email "actions@github.com"
+
+            rm -rf gitops
+            git clone https://x-access-token:${GIT_TOKEN}@github.com/aschett/gitops-workout-webapp.git gitops
+            cd gitops
+
+            VERSION=${{ steps.semantic.outputs.new_release_version }}
+            sed -i "s|ghcr.io/aschett/workout-backend:.*|ghcr.io/aschett/workout-backend:$VERSION|g" backend/deployment.yaml
+
+            sed -i "s|ghcr.io/aschett/workout-frontend:.*|ghcr.io/aschett/workout-frontend:$VERSION|g" frontend/deployment.yaml
+
+            git add backend/deployment.yaml frontend/deployment.yaml
+            git commit -m "chore: deploy backend and frontend $VERSION"
+            git push
