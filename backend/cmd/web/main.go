@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/aschett/workout-webapp/internal/models"
-	"golang.org/x/term"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -26,22 +25,18 @@ func main() {
 	}))
 
 	addr := flag.String("addr", ":4000", "Http network address")
-	user := flag.String("dbuser", "web", "MySQL User")
-	dbname := flag.String("dbname", "testworkoutdb", "MySQL Database Name")
 
-	flag.Parse()
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	dbname := os.Getenv("DB_NAME")
+	password := os.Getenv("DB_PASSWORD")
 
-	fmt.Printf("Enter your MySQL password for User %s for Database %s:", *user, *dbname)
-	passwordBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
-	fmt.Println()
-	if err != nil {
-		logger.Error(err.Error())
+	if host == "" || user == "" || dbname == "" || password == "" {
+		logger.Error("One or more environment variables are not set")
 		os.Exit(1)
 	}
-	password := string(passwordBytes)
-
-	//Building the dsn dynamically
-	dsn := fmt.Sprintf("%s:%s@/%s?parseTime=true", *user, password, *dbname)
+	// Build the dsn dynamically
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?parseTime=true", user, password, host, dbname)
 
 	db, err := openDB(dsn)
 	if err != nil {
