@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllWorkouts } from "../api/api-workout";
+import { Link } from "react-router-dom";
 import type { Workout } from "../types/workout";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
@@ -17,7 +18,7 @@ function ListAllWorkouts() {
       ? a.date.localeCompare(b.date)
       : b.date.localeCompare(a.date)
   );
-//TODO: Add link to Inspect Details to see 
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -31,11 +32,14 @@ function ListAllWorkouts() {
           {sortAsc ? "Newest First" : "Oldest First"}
         </Button>
       </div>
+
       <ul className="space-y-1">
         {sorted.map((w) => (
           <li key={w.id} className="flex justify-between border-b py-2 text-sm">
             <span>{w.date}</span>
+            <Link to={`/workouts/${w.id}`} className="text-primary underline">
               Inspect Details
+            </Link>
           </li>
         ))}
       </ul>
