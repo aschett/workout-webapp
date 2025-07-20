@@ -27,7 +27,7 @@ func TestMain(m *testing.M) {
 
 	mariadbContainer, err := mariadb.Run(ctx,
 		"mariadb:11.0.3",
-		mariadb.WithScripts(filepath.Join("testdata", "seed.sql")),
+		mariadb.WithScripts(filepath.Join("..", "..", "testdata", "seed.sql")),
 		mariadb.WithDatabase("testing"),
 		mariadb.WithUsername("foo"),
 		mariadb.WithPassword("bar"),
