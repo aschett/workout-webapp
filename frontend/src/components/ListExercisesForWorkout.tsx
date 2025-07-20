@@ -22,8 +22,8 @@ useEffect(() => {
 
   getWorkoutByID(Number(id)).then((data) => {
     if (data) {
-      setWorkout(data);
-      setDate(data.date);
+      setWorkout(workout);
+      setDate(workout.date);
     }
   });
 }, [id]);
