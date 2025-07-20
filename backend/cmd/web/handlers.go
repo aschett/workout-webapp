@@ -23,6 +23,7 @@ func (app *application) ViewWorkoutEntries(w http.ResponseWriter, r *http.Reques
 	exercises, err := app.workouts.GetWorkoutEntries(id)
 	if err != nil {
 		app.serverError(w, r, err)
+		return
 	}
 	app.writeJSON(w, http.StatusOK, exercises)
 }
