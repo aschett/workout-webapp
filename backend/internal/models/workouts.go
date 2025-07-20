@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"time"
 )
 
 type Exercise struct {
@@ -85,12 +84,6 @@ func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
 			return nil, err
 		}
 		w.Workouts = entries
-
-		time, err := time.Parse(time.RFC3339, w.Date)
-		if err != nil {
-			return nil, err
-		}
-		w.Date = time.Format("January 2, 2006")
 
 		workouts = append(workouts, w)
 	}
