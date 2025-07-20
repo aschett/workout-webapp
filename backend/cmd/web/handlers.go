@@ -20,7 +20,7 @@ func (app *application) ViewWorkoutEntries(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	exercises, err := app.workouts.GetWorkoutEntries(id)
+	exercises, err := app.workouts.GetWorkoutByID(id)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
