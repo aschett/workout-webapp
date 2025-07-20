@@ -1,6 +1,3 @@
-CREATE DATABASE testworkoutdb;
-USE testworkoutdb;
-
 CREATE TABLE exercises (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE
