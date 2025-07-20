@@ -36,7 +36,7 @@ func main() {
 		os.Exit(1)
 	}
 	// Build the dsn dynamically
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?parseTime=true", user, password, host, dbname)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", user, password, host, dbname)
 
 	db, err := openDB(dsn)
 	if err != nil {
