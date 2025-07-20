@@ -13,8 +13,7 @@ import {
 
 function ListExercisesForWorkout() {
   const { id } = useParams<{ id: string }>();
-  const [workout, setWorkout] = useState<Workout>();
-  const [date, setDate] = useState<string>();
+  const [workout, setWorkout] = useState<Workout | null>(null);
 
 
 useEffect(() => {
@@ -22,18 +21,21 @@ useEffect(() => {
 
   getWorkoutByID(Number(id)).then((data) => {
     if (data) {
-      setWorkout(workout);
-      setDate(workout.date);
+      setWorkout(data);
     }
   });
 }, [id]);
 
+  if (!workout) {
+    return <p className="text-muted-foreground">Loading workout...</p>;
+  }
+  
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Workout on {date}</h1>
+      <h1 className="text-2xl font-semibold">Workout on {workout.date}</h1>
 
       {!workout || workout.workouts.length === 0 ? (
-        <p className="text-muted-foreground">No Workout entries for {date}</p>
+        <p className="text-muted-foreground">No Workout entries for {workout.date}</p>
       ) : (
         <Table>
           <TableHeader>
