@@ -41,6 +41,7 @@ func (app *application) AddNewWorkout(w http.ResponseWriter, r *http.Request) {
 	id, err := app.workouts.AddWorkout(date)
 	if err != nil {
 		app.serverError(w, r, err)
+		return
 	}
 	http.Redirect(w, r, fmt.Sprintf("/api/workouts/%d", id), http.StatusSeeOther)
 }
