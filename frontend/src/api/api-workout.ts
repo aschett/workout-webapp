@@ -1,4 +1,4 @@
-import type { Workout, WorkoutEntry } from '../types/workout';
+import type { Workout } from '../types/workout';
 
 export async function getAllWorkouts(): Promise<Workout[]> {
   const res = await fetch('/api/workouts');
