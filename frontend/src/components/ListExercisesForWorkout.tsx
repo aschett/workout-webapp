@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getWorkoutByID } from "../api/api-workout";
-import type { Workout, WorkoutEntry } from "../types/workout";
+import type { Workout } from "../types/workout";
 import {
   Table,
   TableBody,
