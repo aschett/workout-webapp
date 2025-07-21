@@ -95,6 +95,26 @@ func (m *WorkoutModel) GetAllWorkouts() ([]Workout, error) {
 	return workouts, nil
 }
 
+func (m *WorkoutModel) GetWorkoutByID(id int) (*Workout, error) {
+	stmt := `SELECT id, date FROM workouts WHERE id = ?`
+
+	row := m.DB.QueryRow(stmt, id)
+
+	var workout Workout
+	err := row.Scan(&workout.ID, &workout.Date)
+	if err != nil {
+		return nil, err
+	}
+
+	entries, err := m.GetWorkoutEntries(workout.ID)
+	if err != nil {
+		return nil, err
+	}
+	workout.Workouts = entries
+
+	return &workout, nil
+}
+
 func (m *WorkoutModel) GetWorkoutEntries(workoutID int) ([]WorkoutEntry, error) {
 	stmt := `SELECT we.id, we.workoutID, we.exerciseID, e.name AS exerciseName, we.weight, we.sets, we.reps
              FROM workoutEntries we JOIN exercises e on we.exerciseID = e.id
