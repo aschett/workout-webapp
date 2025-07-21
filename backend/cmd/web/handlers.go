@@ -9,6 +9,7 @@ func (app *application) ViewAllWorkouts(w http.ResponseWriter, r *http.Request) 
 	workouts, err := app.workouts.GetAllWorkouts()
 	if err != nil {
 		app.serverError(w, r, err)
+		return
 	}
 	app.writeJSON(w, http.StatusOK, workouts)
 }
