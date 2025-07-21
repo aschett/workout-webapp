@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getWorkoutByID } from "../api/api-workout";
-import type { Workout, WorkoutEntry } from "../types/workout";
+import type { WorkoutEntry } from "../types/workout";
 import {
   Table,
   TableBody,
@@ -13,29 +13,19 @@ import {
 
 function ListExercisesForWorkout() {
   const { id } = useParams<{ id: string }>();
-  const [workout, setWorkout] = useState<Workout | null>(null);
+  const [entries, setEntries] = useState<WorkoutEntry[]>([]);
 
+  useEffect(() => {
+    if (!id) return;
+    getWorkoutByID(Number(id)).then(setEntries);
+  }, [id]);
 
-useEffect(() => {
-  if (!id) return;
-
-  getWorkoutByID(Number(id)).then((data) => {
-    if (data) {
-      setWorkout(data);
-    }
-  });
-}, [id]);
-
-  if (!workout) {
-    return <p className="text-muted-foreground">Loading workout...</p>;
-  }
-  
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Workout on {workout.date}</h1>
+      <h1 className="text-2xl font-semibold">Workout {id}</h1>
 
-      {!workout || workout.workouts.length === 0 ? (
-        <p className="text-muted-foreground">No Workout entries for {workout.date}</p>
+      {entries.length === 0 ? (
+        <p className="text-muted-foreground">No Workout entries</p>
       ) : (
         <Table>
           <TableHeader>
@@ -47,7 +37,7 @@ useEffect(() => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {workout.workouts.map((entry, index) => (
+            {entries.map((entry, index) => (
               <TableRow key={index}>
                 <TableCell>{entry.exerciseName}</TableCell>
                 <TableCell>{entry.sets}</TableCell>

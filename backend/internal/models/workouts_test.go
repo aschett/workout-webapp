@@ -132,29 +132,6 @@ func TestGetAllWorkouts(t *testing.T) {
 	}
 }
 
-func TestGetWorkoutByID(t *testing.T) {
-	workout, err := testModel.GetWorkoutByID(1)
-	if err != nil {
-		t.Fatalf("TestGetWorkoutByID failed")
-	}
-	if workout.ID != 1 {
-		t.Fatalf("Expected 1, received %d", workout.ID)
-	}
-	if workout.Date != "2024-06-20" {
-		t.Fatalf("Expected 2024-06-20, received %s", workout.Date)
-	}
-	if len(workout.Workouts) != 3 {
-		t.Fatalf("Expected Workouts to be of len 3, received %d", len(workout.Workouts))
-	}
-}
-
-func TestGetWorkoutByID_InvalidInput(t *testing.T) {
-	_, err := testModel.GetWorkoutByID(69420)
-	if err == nil {
-		t.Fatalf("Expected error for non-existent workout ID, but got nil")
-	}
-}
-
 func TestAddWorkout(t *testing.T) {
 	testDate := "2025-10-10"
 

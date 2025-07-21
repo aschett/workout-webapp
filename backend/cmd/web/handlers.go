@@ -9,7 +9,6 @@ func (app *application) ViewAllWorkouts(w http.ResponseWriter, r *http.Request) 
 	workouts, err := app.workouts.GetAllWorkouts()
 	if err != nil {
 		app.serverError(w, r, err)
-		return
 	}
 	app.writeJSON(w, http.StatusOK, workouts)
 }
@@ -21,7 +20,7 @@ func (app *application) ViewWorkoutEntries(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	exercises, err := app.workouts.GetWorkoutByID(id)
+	exercises, err := app.workouts.GetWorkoutEntries(id)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
