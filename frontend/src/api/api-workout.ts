@@ -8,9 +8,9 @@ export async function getAllWorkouts(): Promise<Workout[]> {
 }
 
 
-export async function getWorkoutByID(id: number): Promise<Workout> {
+export async function getWorkoutByID(id: number): Promise<WorkoutEntry[]> {
   const res = await fetch(`/api/workouts/${id}`);
   if (!res.ok) throw new Error("Workout not available");
   const data = await res.json();
-  return data as Workout;
+  return data as WorkoutEntry[];
 }
