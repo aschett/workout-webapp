@@ -13,7 +13,7 @@ func (app *application) ViewAllWorkouts(w http.ResponseWriter, r *http.Request) 
 	app.writeJSON(w, http.StatusOK, workouts)
 }
 
-func (app *application) ViewWorkoutEntries(w http.ResponseWriter, r *http.Request) {
+func (app *application) ViewWorkoutByID(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil || id < 1 {
 		http.NotFound(w, r)

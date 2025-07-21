@@ -46,7 +46,7 @@ func TestViewAllWorkouts(t *testing.T) {
 	}
 }
 
-func TestViewWorkoutEntries(t *testing.T) {
+func TestViewWorkoutByID(t *testing.T) {
 	var app = &application{
 		workouts: testModel,
 	}
@@ -64,25 +64,29 @@ func TestViewWorkoutEntries(t *testing.T) {
 		t.Fatalf("Failed to read response body: %v", err)
 	}
 
-	var workoutEntries []models.WorkoutEntry
-	if err := json.Unmarshal(body, &workoutEntries); err != nil {
+	var workout models.Workout
+	if err := json.Unmarshal(body, &workout); err != nil {
 		t.Fatalf("Failed to parse JSON: %v", err)
 	}
 
-	if len(workoutEntries) != 3 {
-		t.Errorf("Expected 3 WorkoutEntries, received %d", len(workoutEntries))
+	if len(workout.Workouts) != 3 {
+		t.Errorf("Expected 3 WorkoutEntries, received %d", len(workout.Workouts))
 	}
 
-	if workoutEntries[0].ExerciseName == "" {
+	if workout.Workouts[0].ExerciseName == "" {
 		t.Errorf("Expected name for first WorkoutEntry, received empty")
 	}
 
-	if workoutEntries[0].ExerciseName != "Bench Press" {
-		t.Errorf("Expected Bench Press, received %s", workoutEntries[0].ExerciseName)
+	if workout.Workouts[0].ExerciseName != "Bench Press" {
+		t.Errorf("Expected Bench Press, received %s", workout.Workouts[0].ExerciseName)
+	}
+
+	if workout.ID != 1 {
+		t.Errorf("Expected 1, recceived %d", workout.ID)
 	}
 }
 
-func TestViewWorkoutEntries_InvalidID(t *testing.T) {
+func TestWorkoutByID_InvalidID(t *testing.T) {
 	app := &application{workouts: testModel}
 
 	req := httptest.NewRequest(http.MethodGet, "/api/workouts/abc", nil)
