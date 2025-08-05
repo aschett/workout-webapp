@@ -34,8 +34,8 @@ useEffect(() => {
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">Workout on {workout.date}</h1>
 
-      {!workout || workout.workouts.length === 0 ? (
-        <p className="text-muted-foreground">No Workout entries for {workout.date}</p>
+      { workout.workouts === null || workout.workouts.length === 0 ? (
+        <p className="text-muted-foreground">No Exercises done on {workout.date}</p>
       ) : (
         <Table>
           <TableHeader>
