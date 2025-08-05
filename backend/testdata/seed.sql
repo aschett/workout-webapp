@@ -5,7 +5,7 @@ CREATE TABLE exercises (
 
 CREATE TABLE workouts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    date DATE NOT NULL UNIQUE
+    date DATE NOT NULL
 );
 
 CREATE TABLE workoutEntries (

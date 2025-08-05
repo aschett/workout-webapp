@@ -1,6 +1,5 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { Link } from "react-router-dom";
-import { Toaster } from "sonner";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -11,9 +10,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </Link>
         <ModeToggle />
       </header>
-      
-      <Toaster richColors position="top-center" />
-
       <main>{children}</main>
     </div>
   );
