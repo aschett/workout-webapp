@@ -15,7 +15,6 @@ import (
 
 var testModel *WorkoutModel
 var testDB *sql.DB
-var container testcontainers.Container
 
 /*
 The TestMain function in go is to ensure that every test will be ran out of this specific function and ensures that it will be ran first
@@ -23,6 +22,11 @@ Therefore ensuring that our spun up Database Container exists during our testsui
 */
 
 func TestMain(m *testing.M) {
+	code := runTests(m)
+	os.Exit(code)
+}
+
+func runTests(m *testing.M) int {
 	ctx := context.Background()
 
 	mariadbContainer, err := mariadb.Run(ctx,
@@ -35,10 +39,8 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatalf("failed to start testMariaDB-container: %s", err)
 	}
-	container = mariadbContainer
-
 	defer func() {
-		if err := testcontainers.TerminateContainer(container); err != nil {
+		if err := testcontainers.TerminateContainer(mariadbContainer); err != nil {
 			log.Printf("failed to terminate testMariaDB-container: %s", err)
 		}
 	}()
@@ -57,8 +59,7 @@ func TestMain(m *testing.M) {
 	testModel = &WorkoutModel{DB: db}
 
 	code := m.Run()
-
-	os.Exit(code)
+	return code
 }
 
 // All Values are taken out of the ./testdata/seed.sql file

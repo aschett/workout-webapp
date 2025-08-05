@@ -9,15 +9,18 @@ import (
 	"testing"
 
 	"github.com/aschett/workout-webapp/internal/models"
-	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/mariadb"
 )
 
 var testModel *models.WorkoutModel
 var testDB *sql.DB
-var container testcontainers.Container
 
 func TestMain(m *testing.M) {
+	code := runTests(m)
+	os.Exit(code)
+}
+
+func runTests(m *testing.M) int {
 	ctx := context.Background()
 
 	mariadbContainer, err := mariadb.Run(ctx,
@@ -30,10 +33,8 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatalf("failed to start testMariaDB-container: %s", err)
 	}
-	container = mariadbContainer
-
 	defer func() {
-		if err := testcontainers.TerminateContainer(container); err != nil {
+		if err := mariadbContainer.Terminate(ctx); err != nil {
 			log.Printf("failed to terminate testMariaDB-container: %s", err)
 		}
 	}()
@@ -51,7 +52,5 @@ func TestMain(m *testing.M) {
 	testDB = db
 	testModel = &models.WorkoutModel{DB: db}
 
-	code := m.Run()
-
-	os.Exit(code)
+	return m.Run()
 }
