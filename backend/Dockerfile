@@ -9,6 +9,6 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o workout-backend ./cmd/web
 
-EXPOSE 8080
+EXPOSE 4000
 
 CMD ["./workout-backend"]
