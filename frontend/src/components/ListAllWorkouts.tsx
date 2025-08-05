@@ -104,7 +104,7 @@ const handleDateSelect = async (date: Date | undefined) => {
           <li key={w.id} className="flex justify-between border-b py-2 text-sm">
             <span>{w.date}</span>
             <Link to={`/workouts/${w.id}`} className="text-primary underline">
-              Inspect Details
+              Workout Details
             </Link>
           </li>
         ))}
